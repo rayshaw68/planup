@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f3ea" />
+  <meta name="description" content="制定短期与长期计划，坚持每日打卡，看见每一步积累。" />
+  <title>PlanUp · 计划打卡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="PlanUp 首页"><span class="brand-mark">P</span><span>PlanUp</span></a>
+      <nav class="nav-list" aria-label="主要导航">
+        <button class="nav-item active" data-view="today"><span>◉</span>今日</button>
+        <button class="nav-item" data-view="short"><span>↗</span>短期计划</button>
+        <button class="nav-item" data-view="long"><span>◎</span>长期计划</button>
+        <button class="nav-item" data-view="insights"><span>▥</span>复盘</button>
+      </nav>
+      <div class="side-note">
+        <span>本周节奏</span>
+        <strong id="sideWeekRate">0%</strong>
+        <div class="mini-progress"><i id="sideWeekBar"></i></div>
+        <p>稳定比完美更重要。</p>
+      </div>
+      <button class="ghost-btn" id="exportBtn">导出我的数据</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="dateText"></p>
+          <h1 id="pageTitle">今天，向前一点</h1>
+        </div>
+        <button class="primary-btn" id="addPlanBtn"><span>＋</span> 新建计划</button>
+      </header>
+
+      <section id="todayView" class="view active">
+        <div class="hero-grid">
+          <article class="focus-card">
+            <div class="focus-copy">
+              <span class="card-label">TODAY'S FOCUS</span>
+              <h2>把今天过好，<br>就是在靠近未来。</h2>
+              <p id="focusSummary">今天有 0 项计划等待打卡。</p>
+            </div>
+            <div class="orbit-wrap" aria-label="今日完成率">
+              <svg viewBox="0 0 120 120" class="progress-ring">
+                <circle cx="60" cy="60" r="49" class="ring-bg"></circle>
+                <circle cx="60" cy="60" r="49" class="ring-value" id="todayRing"></circle>
+              </svg>
+              <div class="ring-label"><strong id="todayRate">0%</strong><span>今日完成</span></div>
+            </div>
+          </article>
+          <article class="streak-card">
+            <div class="stat-icon">↯</div>
+            <div><span>当前连续打卡</span><strong><b id="streakCount">0</b> 天</strong></div>
+            <p id="streakTip">完成今天的第一项打卡吧</p>
+          </article>
+        </div>
+
+        <div class="section-head">
+          <div><span class="card-label">DAILY CHECK-IN</span><h2>今日打卡</h2></div>
+          <div class="filter-tabs" role="tablist">
+            <button class="filter-tab active" data-filter="all">全部</button>
+            <button class="filter-tab" data-filter="short">短期</button>
+            <button class="filter-tab" data-filter="long">长期</button>
+          </div>
+        </div>
+        <div id="todayList" class="check-list"></div>
+      </section>
+
+      <section id="plansView" class="view">
+        <div class="section-head plans-heading">
+          <div><span class="card-label" id="planEyebrow">SPRINT PLANS</span><h2 id="planHeading">短期计划</h2><p id="planDescription">把目标拆成一段可完成的冲刺。</p></div>
+        </div>
+        <div id="planGrid" class="plan-grid"></div>
+      </section>
+
+      <section id="insightsView" class="view">
+        <div class="insights-grid">
+          <article class="insight-card large">
+            <span class="card-label">LAST 7 DAYS</span>
+            <h2>最近 7 天</h2>
+            <div id="weekChart" class="week-chart"></div>
+          </article>
+          <article class="insight-card"><span>总计划</span><strong id="totalPlans">0</strong><p>正在进行中的目标</p></article>
+          <article class="insight-card"><span>累计打卡</span><strong id="totalChecks">0</strong><p>每一次都算数</p></article>
+          <article class="insight-card reflection">
+            <span class="card-label">WEEKLY NOTE</span><h2>本周复盘</h2>
+            <textarea id="reflectionText" placeholder="这一周，什么做得不错？下周想调整什么？"></textarea>
+            <small id="savedHint">内容会自动保存在当前设备</small>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="移动端导航">
+    <button class="mobile-item active" data-view="today"><span>◉</span><small>今日</small></button>
+    <button class="mobile-item" data-view="short"><span>↗</span><small>短期</small></button>
+    <button class="mobile-add" id="mobileAddBtn" aria-label="新建计划">＋</button>
+    <button class="mobile-item" data-view="long"><span>◎</span><small>长期</small></button>
+    <button class="mobile-item" data-view="insights"><span>▥</span><small>复盘</small></button>
+  </nav>
+
+  <dialog id="planDialog">
+    <form id="planForm" method="dialog">
+      <div class="dialog-head"><div><span class="card-label">NEW INTENTION</span><h2 id="dialogTitle">新建计划</h2></div><button type="button" class="icon-btn" id="closeDialog">×</button></div>
+      <input type="hidden" id="editId" />
+      <label>计划名称<input id="planName" maxlength="36" required placeholder="例如：完成论文第一章" /></label>
+      <div class="form-row">
+        <label>计划类型<select id="planType"><option value="short">短期计划</option><option value="long">长期计划</option></select></label>
+        <label>目标天数<input id="planDays" type="number" min="1" max="3650" value="14" required /></label>
+      </div>
+      <label>为什么要做这件事？<textarea id="planNote" maxlength="100" placeholder="写下一句提醒未来自己的话"></textarea></label>
+      <div class="color-picker"><span>选择颜色</span><div>
+        <input type="radio" name="color" value="sage" id="c1" checked><label for="c1" class="swatch sage"></label>
+        <input type="radio" name="color" value="coral" id="c2"><label for="c2" class="swatch coral"></label>
+        <input type="radio" name="color" value="blue" id="c3"><label for="c3" class="swatch blue"></label>
+        <input type="radio" name="color" value="gold" id="c4"><label for="c4" class="swatch gold"></label>
+      </div></div>
+      <button class="primary-btn wide" type="submit">保存计划</button>
+    </form>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
