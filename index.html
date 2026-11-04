@@ -1,132 +1,125 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f3ea" />
-  <meta name="description" content="制定短期与长期计划，坚持每日打卡，看见每一步积累。" />
-  <title>PlanUp · 计划打卡</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>PlanUp · 长短期计划</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <a class="brand" href="#" aria-label="PlanUp 首页"><span class="brand-mark">P</span><span>PlanUp</span></a>
-      <nav class="nav-list" aria-label="主要导航">
+      <a class="brand" href="#" aria-label="PlanUp 首页"><span>P</span><strong>PlanUp</strong></a>
+      <nav class="side-nav" aria-label="主要导航">
         <button class="nav-item active" data-view="today"><span>◉</span>今日</button>
-        <button class="nav-item" data-view="short"><span>↗</span>短期计划</button>
         <button class="nav-item" data-view="long"><span>◎</span>长期计划</button>
-        <button class="nav-item" data-view="insights"><span>▥</span>复盘</button>
+        <button class="nav-item" data-view="short"><span>↗</span>短期计划</button>
+        <button class="nav-item" data-view="review"><span>▥</span>复盘</button>
       </nav>
-      <div class="side-note">
-        <span>本周节奏</span>
-        <strong id="sideWeekRate">0%</strong>
-        <div class="mini-progress"><i id="sideWeekBar"></i></div>
-        <p>稳定比完美更重要。</p>
+      <div class="sync-card" id="syncCard">
+        <div><span class="status-dot" id="statusDot"></span><strong id="syncTitle">本机模式</strong></div>
+        <p id="syncText">数据暂存在当前浏览器</p>
+        <button class="text-button" id="openCloudBtn">设置云同步</button>
       </div>
-      <button class="ghost-btn" id="exportBtn">导出我的数据</button>
+      <button class="profile-button" id="profileBtn"><span class="avatar">我</span><span><strong id="profileName">我的计划</strong><small id="profileState">未登录</small></span></button>
     </aside>
 
     <main class="main">
       <header class="topbar">
-        <div>
-          <p class="eyebrow" id="dateText"></p>
-          <h1 id="pageTitle">今天，向前一点</h1>
-        </div>
-        <button class="primary-btn" id="addPlanBtn"><span>＋</span> 新建计划</button>
+        <div><p class="date" id="dateText"></p><h1 id="pageTitle">今天，向前一点</h1></div>
+        <button class="primary" id="addPlanBtn">＋ 新建计划</button>
       </header>
 
-      <section id="todayView" class="view active">
+      <section class="view active" id="todayView">
+        <article class="daily-message" id="dailyMessageCard">
+          <div><span class="message-mark">“</span><div><span class="eyebrow" id="messageTone">TODAY'S WORD</span><p id="dailyMessage">真正的进度，不是想了多少，而是今天留下了什么。</p></div></div>
+          <small id="messageBasis">根据昨日完成情况 · 每天 03:00 更新</small>
+        </article>
         <div class="hero-grid">
-          <article class="focus-card">
-            <div class="focus-copy">
-              <span class="card-label">TODAY'S FOCUS</span>
-              <h2>把今天过好，<br>就是在靠近未来。</h2>
-              <p id="focusSummary">今天有 0 项计划等待打卡。</p>
-            </div>
-            <div class="orbit-wrap" aria-label="今日完成率">
-              <svg viewBox="0 0 120 120" class="progress-ring">
-                <circle cx="60" cy="60" r="49" class="ring-bg"></circle>
-                <circle cx="60" cy="60" r="49" class="ring-value" id="todayRing"></circle>
-              </svg>
-              <div class="ring-label"><strong id="todayRate">0%</strong><span>今日完成</span></div>
-            </div>
+          <article class="hero-card">
+            <div><span class="eyebrow">TODAY'S FOCUS</span><h2>把今天过好，<br>就是在靠近未来。</h2><p id="focusSummary"></p></div>
+            <div class="ring-wrap"><svg viewBox="0 0 112 112"><circle class="ring-bg" cx="56" cy="56" r="49"/><circle id="todayRing" class="ring-value" cx="56" cy="56" r="49"/></svg><div><strong id="todayRate">0%</strong><small>今日完成</small></div></div>
           </article>
-          <article class="streak-card">
-            <div class="stat-icon">↯</div>
-            <div><span>当前连续打卡</span><strong><b id="streakCount">0</b> 天</strong></div>
-            <p id="streakTip">完成今天的第一项打卡吧</p>
-          </article>
+          <article class="mini-card"><span>↯ 当前连续打卡</span><div><strong id="streakCount">0</strong><em>天</em></div><p id="streakTip">完成今天的第一项打卡吧</p></article>
         </div>
-
-        <div class="section-head">
-          <div><span class="card-label">DAILY CHECK-IN</span><h2>今日打卡</h2></div>
-          <div class="filter-tabs" role="tablist">
-            <button class="filter-tab active" data-filter="all">全部</button>
-            <button class="filter-tab" data-filter="short">短期</button>
-            <button class="filter-tab" data-filter="long">长期</button>
-          </div>
-        </div>
-        <div id="todayList" class="check-list"></div>
+        <div class="section-head"><div><span class="eyebrow">DAILY CHECK-IN</span><h2>今日打卡</h2></div><div class="filter-tabs"><button class="active" data-filter="all">全部</button><button data-filter="short">短期</button><button data-filter="long">长期</button></div></div>
+        <div class="check-list" id="todayList"></div>
       </section>
 
-      <section id="plansView" class="view">
-        <div class="section-head plans-heading">
-          <div><span class="card-label" id="planEyebrow">SPRINT PLANS</span><h2 id="planHeading">短期计划</h2><p id="planDescription">把目标拆成一段可完成的冲刺。</p></div>
-        </div>
-        <div id="planGrid" class="plan-grid"></div>
+      <section class="view" id="longView">
+        <div class="section-head"><div><span class="eyebrow">LONG-TERM VISION</span><h2>长期计划</h2><p>用持续天数，或明确的起止日期定义一段长期旅程。</p></div></div>
+        <div class="plan-grid" id="longGrid"></div>
       </section>
 
-      <section id="insightsView" class="view">
-        <div class="insights-grid">
-          <article class="insight-card large">
-            <span class="card-label">LAST 7 DAYS</span>
-            <h2>最近 7 天</h2>
-            <div id="weekChart" class="week-chart"></div>
-          </article>
-          <article class="insight-card"><span>总计划</span><strong id="totalPlans">0</strong><p>正在进行中的目标</p></article>
-          <article class="insight-card"><span>累计打卡</span><strong id="totalChecks">0</strong><p>每一次都算数</p></article>
-          <article class="insight-card reflection">
-            <span class="card-label">WEEKLY NOTE</span><h2>本周复盘</h2>
-            <textarea id="reflectionText" placeholder="这一周，什么做得不错？下周想调整什么？"></textarea>
-            <small id="savedHint">内容会自动保存在当前设备</small>
-          </article>
+      <section class="view" id="shortView">
+        <div class="section-head"><div><span class="eyebrow">SHORT-TERM MILESTONES</span><h2>短期计划</h2><p>将长期目标拆成可以安排、打卡与完成的里程碑。</p></div></div>
+        <div class="plan-grid" id="shortGrid"></div>
+      </section>
+
+      <section class="view" id="reviewView">
+        <div class="section-head review-head"><div><span class="eyebrow">REVIEW & ADJUST</span><h2>复盘</h2><p>看见积累、记录思考，再调整接下来的时间安排。</p></div></div>
+        <div class="review-stats">
+          <article><span>计划总数</span><strong id="totalPlans">0</strong></article>
+          <article><span>累计打卡</span><strong id="totalChecks">0</strong></article>
+          <article><span>近 7 天完成率</span><strong id="weekRate">0%</strong></article>
         </div>
+        <div class="review-grid">
+          <article class="reflection-card"><span class="eyebrow">REFLECTION</span><h3>这段时间，我学到了什么？</h3><textarea id="reflectionText" rows="7" placeholder="记录进展、阻碍和下一步调整…"></textarea><small id="savedHint">输入后自动保存</small></article>
+          <article class="week-card"><span class="eyebrow">LAST 7 DAYS</span><h3>近七天节奏</h3><div class="week-chart" id="weekChart"></div></article>
+        </div>
+        <div class="calendar-toolbar">
+          <div><span class="eyebrow">TIME ARRANGEMENT</span><h2>日历排期</h2><p>在复盘中检查过去，并安排下一阶段。</p></div>
+          <div class="month-switch"><button id="prevMonth" aria-label="上个月">‹</button><strong id="monthLabel"></strong><button id="nextMonth" aria-label="下个月">›</button><button id="todayMonth">今天</button></div>
+        </div>
+        <div class="legend"><span><i class="long-dot"></i>长期计划</span><span><i class="short-dot"></i>短期计划</span></div>
+        <div class="calendar" id="calendarGrid"></div>
       </section>
     </main>
   </div>
 
-  <nav class="mobile-nav" aria-label="移动端导航">
+  <nav class="mobile-nav">
     <button class="mobile-item active" data-view="today"><span>◉</span><small>今日</small></button>
-    <button class="mobile-item" data-view="short"><span>↗</span><small>短期</small></button>
-    <button class="mobile-add" id="mobileAddBtn" aria-label="新建计划">＋</button>
     <button class="mobile-item" data-view="long"><span>◎</span><small>长期</small></button>
-    <button class="mobile-item" data-view="insights"><span>▥</span><small>复盘</small></button>
+    <button class="mobile-add" id="mobileAddBtn">＋</button>
+    <button class="mobile-item" data-view="short"><span>↗</span><small>短期</small></button>
+    <button class="mobile-item" data-view="review"><span>▥</span><small>复盘</small></button>
   </nav>
 
-  <dialog id="planDialog">
-    <form id="planForm" method="dialog">
-      <div class="dialog-head"><div><span class="card-label">NEW INTENTION</span><h2 id="dialogTitle">新建计划</h2></div><button type="button" class="icon-btn" id="closeDialog">×</button></div>
-      <input type="hidden" id="editId" />
-      <label>计划名称<input id="planName" maxlength="36" required placeholder="例如：完成论文第一章" /></label>
-      <div class="form-row">
-        <label>计划类型<select id="planType"><option value="short">短期计划</option><option value="long">长期计划</option></select></label>
-        <label>目标天数<input id="planDays" type="number" min="1" max="3650" value="14" required /></label>
-      </div>
-      <label>为什么要做这件事？<textarea id="planNote" maxlength="100" placeholder="写下一句提醒未来自己的话"></textarea></label>
-      <div class="color-picker"><span>选择颜色</span><div>
-        <input type="radio" name="color" value="sage" id="c1" checked><label for="c1" class="swatch sage"></label>
-        <input type="radio" name="color" value="coral" id="c2"><label for="c2" class="swatch coral"></label>
-        <input type="radio" name="color" value="blue" id="c3"><label for="c3" class="swatch blue"></label>
-        <input type="radio" name="color" value="gold" id="c4"><label for="c4" class="swatch gold"></label>
-      </div></div>
-      <button class="primary-btn wide" type="submit">保存计划</button>
+  <dialog id="planDialog" class="modal">
+    <form method="dialog" id="planForm">
+      <div class="modal-head"><div><span class="eyebrow">PLAN DETAILS</span><h2 id="dialogTitle">新建计划</h2></div><button type="button" class="icon-btn" id="closeDialog">×</button></div>
+      <input type="hidden" id="editId">
+      <label>计划类型<select id="planType"><option value="long">长期计划</option><option value="short">短期计划</option></select></label>
+      <label>计划名称<input id="planName" maxlength="60" required placeholder="例如：完成硕士论文"></label>
+      <label id="parentField" class="hidden">所属长期计划<select id="parentId"><option value="">独立短期计划</option></select></label>
+      <div id="weightField" class="range-field hidden"><div><label for="planWeight">在长期计划中的进度比例</label><output id="weightValue">25%</output></div><input id="planWeight" type="range" min="1" max="100" value="25"></div>
+      <fieldset><legend>时间确定方式</legend><div class="segmented"><label><input type="radio" name="scheduleMode" value="duration" checked><span>持续天数</span></label><label><input type="radio" name="scheduleMode" value="range"><span>起止日期</span></label></div></fieldset>
+      <div id="durationFields" class="two-col"><label>开始日期<input id="startDate" type="date" required></label><label>持续天数<input id="durationDays" type="number" min="1" max="3650" value="30" required></label></div>
+      <div id="rangeFields" class="two-col hidden"><label>开始日期<input id="rangeStart" type="date"></label><label>结束日期<input id="rangeEnd" type="date"></label></div>
+      <label>说明<textarea id="planNote" rows="3" maxlength="240" placeholder="写下这项计划为什么重要…"></textarea></label>
+      <div class="modal-actions"><button type="button" class="danger-link hidden" id="deletePlanBtn">删除计划</button><span></span><button type="button" class="secondary" id="cancelDialog">取消</button><button type="submit" class="primary">保存计划</button></div>
     </form>
   </dialog>
-  <div id="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="cloudDialog" class="modal cloud-modal">
+    <form method="dialog" id="cloudForm">
+      <div class="modal-head"><div><span class="eyebrow">PRIVATE CLOUD</span><h2>跨设备安全同步</h2></div><button type="button" class="icon-btn" id="closeCloud">×</button></div>
+      <p class="helper">填写你的 Supabase 项目信息。公开匿名密钥只用于连接，计划数据仍由登录账号和数据库权限保护。</p>
+      <label>Project URL<input id="cloudUrl" type="url" placeholder="https://xxxx.supabase.co"></label>
+      <label>Anon public key<input id="cloudKey" type="password" placeholder="eyJhbGciOi…"></label>
+      <label>登录邮箱<input id="loginEmail" type="email" placeholder="your@email.com"></label>
+      <div class="cloud-actions"><button type="button" class="secondary" id="saveCloudConfig">保存连接</button><button type="button" class="primary" id="sendMagicLink">发送登录链接</button></div>
+      <p class="helper" id="cloudHint">首次使用需先在 Supabase 执行仓库内的 supabase-schema.sql。</p>
+      <button type="button" class="danger-link hidden" id="signOutBtn">退出登录</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
