@@ -49,17 +49,17 @@
           </article>
           <article class="mini-card"><span>↯ 当前连续打卡</span><div><strong id="streakCount">0</strong><em>天</em></div><p id="streakTip">完成今天的第一项打卡吧</p></article>
         </div>
-        <div class="section-head"><div><span class="eyebrow">DAILY CHECK-IN</span><h2>今日打卡</h2></div><div class="filter-tabs"><button class="active" data-filter="all">全部</button><button data-filter="short">短期</button><button data-filter="long">长期</button></div></div>
+        <div class="section-head"><div><span class="eyebrow">DAILY CHECK-IN</span><h2>今日事项打卡</h2><p>计划负责方向，计划中的具体事项才需要打卡。</p></div><div class="filter-tabs"><button class="active" data-filter="all">全部</button><button data-filter="short">短期</button><button data-filter="long">长期</button></div></div>
         <div class="check-list" id="todayList"></div>
       </section>
 
       <section class="view" id="longView">
-        <div class="section-head"><div><span class="eyebrow">LONG-TERM VISION</span><h2>长期计划</h2><p>用持续天数，或明确的起止日期定义一段长期旅程。</p></div></div>
+        <div class="section-head"><div><span class="eyebrow">LONG-TERM VISION</span><h2>长期计划</h2><p>用持续天数或起止日期定义方向，并为其中的具体事项打卡。</p></div></div>
         <div class="plan-grid" id="longGrid"></div>
       </section>
 
       <section class="view" id="shortView">
-        <div class="section-head"><div><span class="eyebrow">SHORT-TERM MILESTONES</span><h2>短期计划</h2><p>将长期目标拆成可以安排、打卡与完成的里程碑。</p></div></div>
+        <div class="section-head"><div><span class="eyebrow">SHORT-TERM MILESTONES</span><h2>短期计划</h2><p>将目标拆成可安排的阶段，并为阶段中的具体事项打卡。</p></div></div>
         <div class="plan-grid" id="shortGrid"></div>
       </section>
 
@@ -103,6 +103,7 @@
       <fieldset><legend>时间确定方式</legend><div class="segmented"><label><input type="radio" name="scheduleMode" value="duration" checked><span>持续天数</span></label><label><input type="radio" name="scheduleMode" value="range"><span>起止日期</span></label></div></fieldset>
       <div id="durationFields" class="two-col"><label>开始日期<input id="startDate" type="date" required></label><label>持续天数<input id="durationDays" type="number" min="1" max="3650" value="30" required></label></div>
       <div id="rangeFields" class="two-col hidden"><label>开始日期<input id="rangeStart" type="date"></label><label>结束日期<input id="rangeEnd" type="date"></label></div>
+      <label>具体打卡事项<textarea id="planTasks" rows="4" maxlength="1000" placeholder="每行填写一项，例如：&#10;阅读论文 30 分钟&#10;整理实验数据"></textarea><small class="helper">每行一项。计划本身不打卡，只有这里的具体事项会出现在“今日事项打卡”。</small></label>
       <label>说明<textarea id="planNote" rows="3" maxlength="240" placeholder="写下这项计划为什么重要…"></textarea></label>
       <div class="modal-actions"><button type="button" class="danger-link hidden" id="deletePlanBtn">删除计划</button><span></span><button type="button" class="secondary" id="cancelDialog">取消</button><button type="submit" class="primary">保存计划</button></div>
     </form>
