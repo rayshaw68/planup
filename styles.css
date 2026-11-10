@@ -13,3 +13,5 @@
 .type-pill.none{background:#ecece7;color:#6d756f}
 .child-list button.child-row{width:100%;border:0;background:transparent;text-align:left;color:inherit;font:inherit}
 @media(max-width:560px){.check-item{grid-template-columns:auto 1fr auto}}
+.add-item-link{width:100%;margin-top:12px;padding:9px 11px;border:1px dashed #bac3b6;border-radius:10px;background:#f7f8f3;color:var(--sage-dark);font-size:12px;font-weight:600;text-align:center}
+.add-item-link:hover{background:var(--sage-soft);border-color:var(--sage)}
