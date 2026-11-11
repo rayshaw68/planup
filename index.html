@@ -42,6 +42,10 @@
           <div><span class="message-mark">“</span><div><span class="eyebrow" id="messageTone">TODAY'S WORD</span><p id="dailyMessage">真正的进度，不是想了多少，而是今天留下了什么。</p></div></div>
           <small id="messageBasis">根据昨日完成情况 · 每天 03:00 更新</small>
         </article>
+        <section class="important-countdown">
+          <div class="important-countdown-head"><div><span class="eyebrow">IMPORTANT DAYS</span><h2>重要日倒计时</h2></div><button type="button" id="addImportantBtn">＋ 添加重要日</button></div>
+          <div class="important-countdown-list" id="importantCountdownList"></div>
+        </section>
         <div class="hero-grid">
           <article class="hero-card">
             <div><span class="eyebrow">TODAY'S FOCUS</span><h2>把今天过好，<br>就是在靠近未来。</h2><p id="focusSummary"></p></div>
@@ -65,6 +69,17 @@
 
       <section class="view" id="reviewView">
         <div class="section-head review-head"><div><span class="eyebrow">REVIEW & ADJUST</span><h2>复盘</h2><p>看见积累、记录思考，再调整接下来的时间安排。</p></div></div>
+        <div class="calendar-toolbar">
+          <div><span class="eyebrow">TIME ARRANGEMENT</span><h2>日历排期</h2><p>在复盘中检查过去，并安排下一阶段。</p></div>
+          <div class="month-switch"><button id="prevMonth" aria-label="上个月">‹</button><strong id="monthLabel"></strong><button id="nextMonth" aria-label="下个月">›</button><button id="todayMonth">今天</button></div>
+        </div>
+        <div class="calendar-view-tabs" aria-label="日历视图">
+          <button class="active" data-calendar-mode="default">默认视图</button>
+          <button data-calendar-mode="long">长期计划</button>
+          <button data-calendar-mode="short">独立短期计划</button>
+        </div>
+        <div class="legend" id="calendarLegend"></div>
+        <div class="calendar" id="calendarGrid"></div>
         <div class="review-stats">
           <article><span>计划总数</span><strong id="totalPlans">0</strong></article>
           <article><span>累计打卡</span><strong id="totalChecks">0</strong></article>
@@ -74,12 +89,6 @@
           <article class="reflection-card"><span class="eyebrow">REFLECTION</span><h3>这段时间，我学到了什么？</h3><textarea id="reflectionText" rows="7" placeholder="记录进展、阻碍和下一步调整…"></textarea><small id="savedHint">输入后自动保存</small></article>
           <article class="week-card"><span class="eyebrow">LAST 7 DAYS</span><h3>近七天节奏</h3><div class="week-chart" id="weekChart"></div></article>
         </div>
-        <div class="calendar-toolbar">
-          <div><span class="eyebrow">TIME ARRANGEMENT</span><h2>日历排期</h2><p>在复盘中检查过去，并安排下一阶段。</p></div>
-          <div class="month-switch"><button id="prevMonth" aria-label="上个月">‹</button><strong id="monthLabel"></strong><button id="nextMonth" aria-label="下个月">›</button><button id="todayMonth">今天</button></div>
-        </div>
-        <div class="legend"><span><i class="long-dot"></i>长期计划</span><span><i class="short-dot"></i>短期计划</span></div>
-        <div class="calendar" id="calendarGrid"></div>
       </section>
     </main>
   </div>
@@ -122,15 +131,29 @@
     </form>
   </dialog>
 
+  <dialog id="importantDialog" class="modal">
+    <form method="dialog" id="importantForm">
+      <div class="modal-head"><div><span class="eyebrow">IMPORTANT DAY</span><h2 id="importantDialogTitle">添加重要日</h2></div><button type="button" class="icon-btn" id="closeImportantDialog">×</button></div>
+      <input type="hidden" id="editImportantId">
+      <label>重要日名称<input id="importantName" maxlength="60" required placeholder="例如：论文答辩"></label>
+      <label>日期<input id="importantDate" type="date" required></label>
+      <label>说明<textarea id="importantNote" rows="3" maxlength="240" placeholder="写下需要提前准备的事情…"></textarea></label>
+      <div class="modal-actions"><button type="button" class="danger-link hidden" id="deleteImportantBtn">删除重要日</button><span></span><button type="button" class="secondary" id="cancelImportantDialog">取消</button><button type="submit" class="primary">保存重要日</button></div>
+    </form>
+  </dialog>
+
   <dialog id="cloudDialog" class="modal cloud-modal">
     <form method="dialog" id="cloudForm">
       <div class="modal-head"><div><span class="eyebrow">PRIVATE CLOUD</span><h2>跨设备安全同步</h2></div><button type="button" class="icon-btn" id="closeCloud">×</button></div>
       <p class="helper">填写你的 Supabase 项目信息。公开匿名密钥只用于连接，计划数据仍由登录账号和数据库权限保护。</p>
       <label>Project URL<input id="cloudUrl" type="url" placeholder="https://xxxx.supabase.co"></label>
       <label>Anon public key<input id="cloudKey" type="password" placeholder="eyJhbGciOi…"></label>
-      <label>登录邮箱<input id="loginEmail" type="email" placeholder="your@email.com"></label>
-      <div class="cloud-actions"><button type="button" class="secondary" id="saveCloudConfig">保存连接</button><button type="button" class="primary" id="sendMagicLink">发送登录链接</button></div>
-      <p class="helper" id="cloudHint">首次使用需先在 Supabase 执行仓库内的 supabase-schema.sql。</p>
+      <label>登录邮箱<input id="loginEmail" type="email" autocomplete="username" placeholder="your@email.com"></label>
+      <label id="passwordField"><span id="passwordLabelText">登录密码</span><input id="loginPassword" type="password" autocomplete="current-password" minlength="8" placeholder="至少 8 位密码"></label>
+      <label class="hidden" id="confirmPasswordField">确认密码<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="再次输入密码"></label>
+      <div class="cloud-actions"><button type="button" class="secondary" id="saveCloudConfig">保存连接</button><button type="button" class="primary" id="passwordLoginBtn">邮箱密码登录</button></div>
+      <div class="cloud-secondary-actions"><button type="button" class="text-button" id="signUpBtn">首次注册</button><button type="button" class="text-button" id="resetPasswordBtn">忘记密码</button><button type="button" class="text-button hidden" id="updatePasswordBtn">更新密码</button></div>
+      <p class="helper" id="cloudHint">使用你自己的邮箱和密码登录。首次使用可注册；已有邮箱账号可通过“忘记密码”设置密码。</p>
       <button type="button" class="danger-link hidden" id="signOutBtn">退出登录</button>
     </form>
   </dialog>
